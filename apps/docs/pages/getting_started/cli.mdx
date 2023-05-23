@@ -1,0 +1,61 @@
+---
+title: CLI - LocalHooks
+---
+
+import { Steps, Callout } from "nextra-theme-docs";
+
+Our CLI is hosted on [NPMJS](https://www.npmjs.com/). To use it
+
+<Steps>
+
+### Prerequisites
+
+Make sure you have NPM & Node installed.
+
+### Start the CLI
+
+Type into a terminal:
+
+```
+npx localhooks-cli \
+  -s <the url from render.com> \
+  -f <the url to foward to> \
+  -c <the id of the channel>
+```
+
+#### Example
+
+```
+npx localhooks-cli \
+  -s https://server.localhooks.dev/events \
+  -f http://localhost:3001/webhooks \
+  -c f917ef89-eef8-4897-8a49-218390abdefa
+```
+
+<Callout type="default">
+  Note: The CLI will make a POST request to your endpoint.
+</Callout>
+
+<Callout type="info">
+  Note: You can test the forward with an example website like:
+  [webhook.site](https://webhook.site/)
+</Callout>
+
+</Steps>
+
+### Basic Help
+
+```
+Usage: localhooks-cli [options]
+
+CLI to test webhooks locally.
+
+Options:
+-V, --version output the version number
+-s, --server <url> The URL for you LocalHooks server. (default: "https://server.localhooks.dev/events")
+-f, --forward <url> The URL to forward events to. (default: "http://localhost:3001/webhooks")
+-c, --channel <id>   The channel id of events you want to listen to.
+-d, --debug Enable debug. (default: false)
+-h, --help display help for command
+
+```

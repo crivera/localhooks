@@ -1,0 +1,21 @@
+{
+  "private": true,
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+  },
+  "devDependencies": {
+    "@turbo/gen": "^1.9.9",
+    "eslint": "^8.41.0",
+    "eslint-config-custom": "*",
+    "prettier": "^2.8.8"
+  },
+  "name": "localhooks",
+  "packageManager": "npm@8.15.0",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]
+}

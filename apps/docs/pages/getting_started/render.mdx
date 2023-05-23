@@ -1,0 +1,71 @@
+---
+title: Render.com - LocalHooks
+---
+
+import { Steps, Callout } from "nextra-theme-docs";
+import UuidGenerator from "ui/components/UuidGenerator";
+
+<Steps>
+
+### Signup for Render.com
+
+To get started with Render.com you will need to create a account with [render.com](https://dashboard.render.com/register?next=%2F).
+
+![Signup](/images/render/render-signup.png)
+
+### Create a new WebService
+
+![Service](/images/render/render-service.png)
+
+### Provide the Github URL
+
+Enter the following in the Public Git repository URL: `https://github.com/crivera/localhooks`
+
+![GitUrl](/images/render/render-repository-url.png)
+
+### Fill out the following form
+
+- **Name**: A unique name for your service (this will determine your URL to use for the webhooks)
+- **Root Directory**: Enter `apps/server`
+- **Build Command**: Enter `npm i && npm run build`
+- **Start Command**: Enter `npm run start:prod`
+
+<Callout type="warning">
+  Make sure to **select** the `Free Instance` type.
+</Callout>
+
+Hit `Create WebService`
+
+![Form](/images/render/render-form.png)
+
+### Done
+
+Write down your URL to use for your webhooks.
+
+![FinalURL](/images/render/render-url.png)
+
+You can now point any webhooks (i.e. [Stripe](https://stripe.com), [Clerk](https://clerk.com), etc...) for development/staging purposes to the URL from Step 5 and append `/message`.
+
+<Callout type="info">
+  For example: https://server.localhooks.dev/message
+</Callout>
+
+</Steps>
+
+### Shared Instances
+
+If you're collaborating on the instance with others, such as a development team, you can employ channels to avoid interfering with each other's work. Simply add any value (up to 20 characters) as a route param to the `/message` endpoint.
+
+<Callout type="info">
+  For example: https://server.localhooks.dev/message/chris-rivera
+
+Use a UUID to make sure to not clash with another channel.
+
+{" "}
+
+  <UuidGenerator />
+</Callout>
+
+### Example
+
+![Postman](/images/render/postman.png)
