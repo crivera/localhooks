@@ -17,6 +17,10 @@ Options:
 
 ```
 
+## Local Development
+
+You can run the project locally using: `npm run dev -- -d`
+
 ## License
 
 MIT
