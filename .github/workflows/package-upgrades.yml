@@ -5,6 +5,8 @@ on:
   schedule:
     # Runs every Monday at 15:00 UTC (9am Eastern, depending on DST)
     - cron: "0 15 * * 1"
+permissions:
+  contents: write
 
 jobs:
   upgrade:
