@@ -1,0 +1,61 @@
+name: Upgrade Dependencies
+
+on:
+  workflow_dispatch: # Allow running on-demand
+  schedule:
+    # Runs every Monday at 15:00 UTC (9am Eastern, depending on DST)
+    - cron: "0 15 * * 1"
+
+jobs:
+  upgrade:
+    name: Upgrade & Open Pull Request
+    runs-on: ubuntu-latest
+    env:
+      # This branch will receive updates each time the workflow runs
+      # It doesn't matter if it's deleted when merged, it'll be re-created
+      BRANCH_NAME: chore/auto-dependency-upgrades
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: develop
+      - name: "Checkout upgrade branch"
+        run: git checkout -b "$BRANCH_NAME"
+
+      - name: "Install NPM Check Updates"
+        run: npm i -g npm-check-updates
+
+      - name: "Upgrade dependencies"
+        run: |
+          ncu -u --deep
+          npm i
+
+      - name: Detect changes
+        id: changes
+        run:
+          # This output boolean tells us if the dependencies have actually changed
+          echo "count=$(git status --porcelain=v1 2>/dev/null | wc -l)" >> $GITHUB_OUTPUT
+
+      - name: Commit & push changes
+        # Only push if changes exist
+        if: steps.changes.outputs.count > 0
+        run: |
+          git config user.name Christopher Rivera
+          git config user.email imbaroxxor@gmail.com
+          git add .
+          git commit -m "chore: upgrade all packages"
+          git push -f -u origin $BRANCH_NAME
+      - name: Open pull request if needed
+        if: steps.changes.outputs.count > 0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        # Only open a PR if the branch is not attached to an existing one
+        run: |
+          PR=$(gh pr list --head $BRANCH_NAME --json number -q '.[0].number')
+          if [ -z $PR ]; then
+            gh pr create \
+            --head $BRANCH_NAME \
+            --title "📦⬆️ 👌 Upgrade all packages" \
+            --body "View the full log [here](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}). 👀"
+          else
+            echo "Pull request already exists, won't create a new one."
+          fi
