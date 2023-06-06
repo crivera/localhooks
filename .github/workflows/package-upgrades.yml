@@ -38,9 +38,9 @@ jobs:
       - name: Commit & push changes
         # Only push if changes exist
         if: steps.changes.outputs.count > 0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          git config user.name Christopher Rivera
-          git config user.email imbaroxxor@gmail.com
           git add .
           git commit -m "chore: upgrade all packages"
           git push -f -u origin $BRANCH_NAME
