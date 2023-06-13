@@ -1,6 +1,6 @@
 # `LocalHooks CLI`
 
-This is the CLI for the LocalHooks Project. See the documentation here: https://docs.localhoooks.dev
+This is the CLI for the LocalHooks Project. See the documentation here: https://docs.localhooks.dev
 
 ```
 Usage: localhooks-cli [options]

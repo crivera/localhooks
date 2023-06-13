@@ -10,7 +10,7 @@
   "bugs": {
     "url": "https://github.com/crivera/localhooks/issues"
   },
-  "homepage": "https://localhoooks.dev",
+  "homepage": "https://localhooks.dev",
   "private": false,
   "files": [
     "dist/"
