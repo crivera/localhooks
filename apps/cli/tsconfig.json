@@ -4,11 +4,11 @@
   "exclude": ["node_modules", "dist", ".turbo"],
   "compilerOptions": {
     "target": "es5",
-    "module": "ES6",
+    "module": "NodeNext",
     "outDir": "./dist",
     "baseUrl": "./",
     "lib": ["ES2016"],
-    "moduleResolution": "nodenext",
+    "moduleResolution": "NodeNext",
     "resolveJsonModule": true
   },
   "ts-node": {

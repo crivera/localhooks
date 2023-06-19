@@ -3,12 +3,23 @@
 import { Command } from "commander";
 import axios from "axios";
 import EventSource from "eventsource";
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const file = fs.readFileSync(
+  path.resolve(__dirname, "../package.json"),
+  "utf-8"
+);
 
 const program = new Command();
 program
   .name("localhooks-cli")
   .description("CLI to test webhooks locally.")
-  .version("1.0.0");
+  .version(JSON.parse(file).version);
 
 program
   .option(
@@ -37,18 +48,29 @@ const forwardTo = options.forward;
 const channel = options.channel;
 
 // WORK
-const es = new EventSource(`${sseServer}/${channel}`);
-es.onmessage = async (data) => {
-  if (options.debug) console.log(`Got message`, data);
 
-  const response = await axios.post(forwardTo, data.data, {
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-  // we could add some retry logic here but - nah
-  if (response.status !== 200) {
-    console.error("Error forwarding data", data);
+let fullRoute = sseServer;
+if (channel) {
+  fullRoute += `/${channel}`;
+}
+
+const es = new EventSource(fullRoute);
+es.onmessage = async (message) => {
+  try {
+    if (options.debug) console.log(`Got message`, message);
+    const { body, headers } = JSON.parse(message.data);
+    if (options.debug) console.log(`Got body`, body);
+    if (options.debug) console.log(`Got headers`, headers);
+
+    const response = await axios.post(forwardTo, body, {
+      headers: headers,
+    });
+    // we could add some retry logic here but - nah
+    if (response.status !== 200) {
+      console.error("Error forwarding message", message);
+    }
+  } catch (e) {
+    console.error(e);
   }
 };
 

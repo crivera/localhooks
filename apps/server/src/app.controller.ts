@@ -3,16 +3,21 @@ import {
   Body,
   Controller,
   Get,
+  Headers,
   Param,
   Post,
+  RawBodyRequest,
+  Req,
   Sse,
 } from "@nestjs/common";
-import { Observable, Subject, filter, map } from "rxjs";
 import { promises } from "fs";
+import { omit } from "lodash";
+import { Observable, Subject, filter, map } from "rxjs";
 
 type Message = {
-  data: Record<string, unknown>;
+  data: string;
   channel?: string;
+  headers: Partial<Headers>;
 };
 
 function validateChannel(channel?: string) {
@@ -43,20 +48,21 @@ export class AppController {
 
   @Post("message/:channel?")
   message(
-    @Body() body: Record<string, unknown>,
+    @Headers() headers: Headers,
+    @Req() req: RawBodyRequest<Request>,
     @Param("channel") channel?: string
   ) {
     validateChannel(channel);
-
     this.queue.next({
       channel,
-      data: body,
+      data: req.rawBody.toString(),
+      headers: omit(headers, ["host", "connection", "content-length"]),
     });
     return { status: "ok" };
   }
 
   @Sse("events/:channel?")
-  events(@Param("channel") channel?: string): Observable<MessageEvent> {
+  events(@Param("channel") channel: string): Observable<MessageEvent> {
     validateChannel(channel);
 
     return this.queue.asObservable().pipe(
@@ -74,7 +80,12 @@ export class AppController {
         // if the channels match
         return !value.channel || channel === value.channel;
       }),
-      map((value) => ({ data: value.data } as MessageEvent))
+      map(
+        (value) =>
+          ({
+            data: { body: value.data, headers: value.headers },
+          } as MessageEvent)
+      )
     );
   }
 }
