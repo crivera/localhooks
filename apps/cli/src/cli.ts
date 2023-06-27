@@ -37,27 +37,36 @@ const forwardTo = options.forward;
 const channel = options.channel;
 
 // WORK
-const es = new EventSource(`${sseServer}/${channel}`);
-es.onmessage = async (data) => {
-  if (options.debug) console.log(`Got message`, data);
-
-  const response = await axios.post(forwardTo, data.data, {
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-  // we could add some retry logic here but - nah
-  if (response.status !== 200) {
-    console.error("Error forwarding data", data);
+try {
+  let fullRoute = sseServer;
+  if (channel) {
+    fullRoute += `/${channel}`;
   }
-};
 
-// CLEANUP
-const shutdown = () => {
-  es.close();
-};
+  const es = new EventSource(fullRoute);
+  es.onmessage = async (message) => {
+    if (options.debug) console.log(`Got message`, message);
+    const { body, headers } = JSON.parse(message.data);
+    if (options.debug) console.log(`Got body`, typeof body);
+    if (options.debug) console.log(`Got headers`, typeof headers);
+    const response = await axios.post(forwardTo, body, {
+      headers: headers,
+    });
+    // we could add some retry logic here but - nah
+    if (response.status !== 200) {
+      console.error("Error forwarding message", message);
+    }
+  };
 
-process.on("SIGINT", shutdown);
-process.on("SIGHUP", shutdown);
-process.on("SIGTERM", shutdown);
-process.on("SIGUSR2", shutdown);
+  // CLEANUP
+  const shutdown = () => {
+    es.close();
+  };
+
+  process.on("SIGINT", shutdown);
+  process.on("SIGHUP", shutdown);
+  process.on("SIGTERM", shutdown);
+  process.on("SIGUSR2", shutdown);
+} catch (e) {
+  console.error(e);
+}

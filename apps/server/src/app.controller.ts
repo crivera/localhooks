@@ -3,16 +3,19 @@ import {
   Body,
   Controller,
   Get,
+  Headers,
   Param,
   Post,
   Sse,
 } from "@nestjs/common";
-import { Observable, Subject, filter, map } from "rxjs";
 import { promises } from "fs";
+import { omit } from "lodash";
+import { Observable, Subject, filter, map } from "rxjs";
 
 type Message = {
   data: Record<string, unknown>;
   channel?: string;
+  headers: Partial<Headers>;
 };
 
 function validateChannel(channel?: string) {
@@ -43,6 +46,7 @@ export class AppController {
 
   @Post("message/:channel?")
   message(
+    @Headers() headers: Headers,
     @Body() body: Record<string, unknown>,
     @Param("channel") channel?: string
   ) {
@@ -51,12 +55,13 @@ export class AppController {
     this.queue.next({
       channel,
       data: body,
+      headers: omit(headers, ["host", "connection", "content-length"]),
     });
     return { status: "ok" };
   }
 
   @Sse("events/:channel?")
-  events(@Param("channel") channel?: string): Observable<MessageEvent> {
+  events(@Param("channel") channel: string): Observable<MessageEvent> {
     validateChannel(channel);
 
     return this.queue.asObservable().pipe(
@@ -74,7 +79,12 @@ export class AppController {
         // if the channels match
         return !value.channel || channel === value.channel;
       }),
-      map((value) => ({ data: value.data } as MessageEvent))
+      map(
+        (value) =>
+          ({
+            data: { body: value.data, headers: value.headers },
+          } as MessageEvent)
+      )
     );
   }
 }
