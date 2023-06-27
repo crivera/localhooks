@@ -6,6 +6,8 @@ import {
   Headers,
   Param,
   Post,
+  RawBodyRequest,
+  Req,
   Sse,
 } from "@nestjs/common";
 import { promises } from "fs";
@@ -13,7 +15,7 @@ import { omit } from "lodash";
 import { Observable, Subject, filter, map } from "rxjs";
 
 type Message = {
-  data: Record<string, unknown>;
+  data: string;
   channel?: string;
   headers: Partial<Headers>;
 };
@@ -47,14 +49,13 @@ export class AppController {
   @Post("message/:channel?")
   message(
     @Headers() headers: Headers,
-    @Body() body: Record<string, unknown>,
+    @Req() req: RawBodyRequest<Request>,
     @Param("channel") channel?: string
   ) {
     validateChannel(channel);
-
     this.queue.next({
       channel,
-      data: body,
+      data: req.rawBody.toString(),
       headers: omit(headers, ["host", "connection", "content-length"]),
     });
     return { status: "ok" };
