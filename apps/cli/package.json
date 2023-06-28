@@ -1,6 +1,6 @@
 {
   "name": "localhooks-cli",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "CLI for connecting to a LocalHooks Server and forwarding messages.",
   "repository": {
     "type": "git",
@@ -26,7 +26,7 @@
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "tsc",
-    "dev": "ts-node cli.ts",
+    "dev": "ts-node ./src/cli.ts",
     "start": "node dist/cli.js",
     "publish:pre": "npm run build",
     "publish:post": "npm publish && git push --follow-tags",

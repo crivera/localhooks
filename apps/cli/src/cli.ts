@@ -3,13 +3,15 @@
 import { Command } from "commander";
 import axios from "axios";
 import EventSource from "eventsource";
-import pkg from "./package.json";
+import fs from "fs";
+
+const file = fs.readFileSync("./package.json", "utf-8");
 
 const program = new Command();
 program
   .name("localhooks-cli")
   .description("CLI to test webhooks locally.")
-  .version(pkg.version);
+  .version(JSON.parse(file).version);
 
 program
   .option(
