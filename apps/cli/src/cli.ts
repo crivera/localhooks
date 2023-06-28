@@ -3,13 +3,13 @@
 import { Command } from "commander";
 import axios from "axios";
 import EventSource from "eventsource";
-import { version } from "../package.json";
+import pkg from "../package.json";
 
 const program = new Command();
 program
   .name("localhooks-cli")
   .description("CLI to test webhooks locally.")
-  .version(version);
+  .version(pkg.version);
 
 program
   .option(
