@@ -21,13 +21,13 @@
     "development"
   ],
   "type": "module",
-  "main": "dist/cli.js",
-  "bin": "dist/cli.js",
+  "main": "dist/src/cli.js",
+  "bin": "dist/src/cli.js",
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "tsc",
     "dev": "ts-node src/cli.ts",
-    "start": "node dist/cli.js",
+    "start": "node dist/src/cli.js",
     "publish:pre": "npm run build",
     "publish:post": "npm publish && git push --follow-tags",
     "release:patch": "npm run publish:pre && npm version patch && npm run publish:post",
