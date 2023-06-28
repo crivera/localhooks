@@ -1,6 +1,6 @@
 {
   "name": "localhooks-cli",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "CLI for connecting to a LocalHooks Server and forwarding messages.",
   "repository": {
     "type": "git",
