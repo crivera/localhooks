@@ -8,7 +8,7 @@
     "outDir": "./dist",
     "baseUrl": "./",
     "lib": ["ES2016"],
-    "moduleResolution": "nodenext",
+    "moduleResolution": "Node",
     "resolveJsonModule": true
   },
   "ts-node": {

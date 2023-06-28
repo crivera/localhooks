@@ -3,7 +3,7 @@
 import { Command } from "commander";
 import axios from "axios";
 import EventSource from "eventsource";
-const pkg = require("../package.json");
+import pkg from "./package.json";
 
 const program = new Command();
 program
