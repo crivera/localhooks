@@ -35,8 +35,8 @@
     "release:major": "npm run publish:pre && npm version major && npm run publish:post"
   },
   "devDependencies": {
-    "@types/eventsource": "^1.1.11",
-    "@types/node": "^20.5.7",
+    "@types/eventsource": "^1.1.12",
+    "@types/node": "^20.6.5",
     "eslint-config-custom": "*",
     "rimraf": "^5.0.1",
     "ts-node": "^10.9.1",
