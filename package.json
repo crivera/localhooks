@@ -7,10 +7,10 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
-    "@turbo/gen": "^1.10.13",
-    "eslint": "^8.48.0",
+    "@turbo/gen": "^1.10.14",
+    "eslint": "^8.50.0",
     "eslint-config-custom": "*",
-    "prettier": "^3.0.2"
+    "prettier": "^3.0.3"
   },
   "name": "localhooks",
   "packageManager": "npm@8.15.0",
