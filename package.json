@@ -7,8 +7,8 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
-    "@turbo/gen": "^1.10.14",
-    "eslint": "^8.50.0",
+    "@turbo/gen": "^1.10.16",
+    "eslint": "^8.53.0",
     "eslint-config-custom": "*",
     "prettier": "^3.0.3"
   },
