@@ -9,19 +9,19 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "next": "^13.5.3",
-    "nextra": "^2.13.1",
-    "nextra-theme-docs": "^2.13.1",
+    "next": "^14.1.0",
+    "nextra": "^2.13.3",
+    "nextra-theme-docs": "^2.13.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "ui": "*"
   },
   "devDependencies": {
-    "@types/node": "^20.8.0",
-    "@types/react": "^18.2.24",
-    "@types/react-dom": "^18.2.8",
+    "@types/node": "^20.11.17",
+    "@types/react": "^18.2.55",
+    "@types/react-dom": "^18.2.19",
     "eslint-config-custom": "*",
     "tsconfig": "*",
-    "typescript": "^5.2.2"
+    "typescript": "^5.3.3"
   }
 }
